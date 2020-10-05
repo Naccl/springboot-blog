@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:replace="${title}">博客详情</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/me.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/github-badge.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css">
+</head>
+<body class="site">
+
+  <!--导航-->
+  <nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui m-blue header item">管理后台</h2>
+        <a href="#" th:href="@{/admin/blogs}" class="item m-mobile-hide m-item" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>博客</a>
+        <a href="#" th:href="@{/admin/types}" class="item m-mobile-hide m-item" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>分类</a>
+        <a href="#" th:href="@{/admin/tags}" class="item m-mobile-hide m-item" th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>标签</a>
+        <a href="#" th:href="@{/admin/comments}" class="item m-mobile-hide m-item" th:classappend="${n==4} ? 'active'"><i class="edit outline icon"></i>留言</a>
+        <a href="#" th:href="@{/}" class="item m-mobile-hide m-item"><i class="sign-out icon"></i>返回前台</a>
+        <div class="right m-mobile-hide menu m-item">
+          <div class="ui dropdown item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" th:src="@{${session.user.avatar}}">
+              <span th:text="${session.user.nickname}">Naccl</span>
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+
+
+  <div class="site-content"></div>
+
+
+  <th:block th:fragment="myScript">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/editormd.min.js"></script>
+    <script>
+        $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
+
+        $('.ui.dropdown').dropdown({
+            on: 'click'
+        });
+
+        $('.menu.toggle').click(function () {
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+
+        /* 一言 */
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'https://v1.hitokoto.cn/?c=a');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                var text = document.getElementById('hitokotoText');
+                var from = document.getElementById('hitokotoFrom');
+                text.innerText = data.hitokoto;
+                from.innerText = "——《" + from.innerText + data.from + "》";
+            }
+        }
+        xhr.send();
+    </script>
+  </th:block>
+
+</body>
+</html>

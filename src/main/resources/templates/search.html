@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>搜索结果 | Naccl'Blog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body class="site">
+
+  <!--导航-->
+  <nav th:replace="_fragments :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">Blog</h2>
+        <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
+        <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
+        <a href="#" class="active item m-mobile-hide m-item"><i class="tags icon"></i>标签</a>
+        <a href="#" class="item m-mobile-hide m-item"><i class="clone icon"></i>归档</a>
+        <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
+        <div class="right item m-mobile-hide m-item">
+          <div class="ui icon inverted transparent input m-margin-tb-tiny">
+            <input type="text" placeholder="Search....">
+            <i class="search link icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <div class="site-content">
+
+    <!--中间内容-->
+    <div class="m-padded-tb-big animated fadeIn">
+      <div class="ui container">
+        <div class="ui stackable grid">
+
+          <!--左边博客列表-->
+          <div class="twelve wide column">
+
+            <!--header-->
+            <div class="ui top attached segment m-margin-bottom-big">
+              <div class="ui middle aligned two column grid">
+                <div class="column">
+                  <h2 class="ui teal header">搜索结果</h2>
+                </div>
+                <div class="right aligned column">
+                  共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}">14</h2> 篇
+                </div>
+              </div>
+            </div>
+
+            <!--未找到-->
+            <div class="ui top attached teal segment" th:if="${page.totalElements}==0">
+              <h1 class="ui horizontal divider header m-margin-tb">未找到</h1>
+              <p class="ui horizontal divider header m-margin-tb">抱歉，没有符合您搜索条件的结果。请换其它关键词再试。</p>
+            </div>
+
+            <!--博客列表-->
+            <div>
+              <div class="ui padded segment m-padded-tb-large m-margin-bottom-big m-box"
+                   th:each="blog : ${page.content}">
+                <div class="ui middle aligned mobile reversed stackable grid">
+
+                  <div class="eleven wide column">
+                    <div class="ui grid m-margin-left">
+
+                      <div class="row m-padded-tb-small">
+                        <h3 class="ui header">
+                          <a href="#" target="_blank" class="m-black" th:href="@{/blog/{id}(id=${blog.id})}"
+                             th:text="${blog.title}">你真的理解什么是财富自由吗？</a>
+                        </h3>
+                      </div>
+
+                      <div class="row m-padded-tb-small">
+                        <div class="ui horizontal link list m-align">
+                          <div class="item m-align">
+                            <img src="https://unsplash.it/100/100?image=1005" th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image m-align">
+                            <div class="content m-align"><a href="javascript:;" class="header m-align" th:text="${blog.user.nickname}">Naccl</a></div>
+                          </div>
+                          <div class="item m-align">
+                            <i class="calendar icon m-align"></i><strong class="m-align" th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}">2017-10-01</strong>
+                          </div>
+                          <div class="item m-align">
+                            <i class="folder open icon m-align"></i><strong><a class="m-align" href="#" target="_blank" th:href="@{/types/{id}(id=${blog.type.id})}" th:text="${blog.type.name}">认知升级</a></strong>
+                          </div>
+                          <div class="item m-align">
+                            <i class="eye icon m-align"></i><strong class="m-align" th:text="|${blog.views}|">2342</strong>
+                          </div>
+                          <div class="item m-align">
+                            <i class="pencil alternate icon m-align"></i><strong class="m-align" th:text="|字数≈${blog.wordCount}字|">2342</strong>
+                          </div>
+                          <div class="item m-align">
+                            <i class="clock icon m-align"></i><strong class="m-align" th:text="|阅读时长≈${blog.readTime}分|">2342</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="ui section divider m-margin-lr-no"></div>
+
+                      <div class="row m-padded-tb-small">
+                        <p class="m-text" th:text="${blog.description}">
+                          正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来就没有想过，只是大家都那么做而已…...</p>
+                      </div>
+
+                      <div class="row m-padded-tb-small">
+                        <a href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}" class="color-btn">阅读全文</a>
+                      </div>
+
+                      <div class="ui section divider m-margin-lr-no"></div>
+
+                      <!--标签-->
+                      <div class="row m-padded-tb-small">
+                        <div class="column m-padding-left-no">
+                          <a href="#" target="_blank" th:href="@{/tags/{id}(id=${tag.id})}"
+                             class="ui large tag label m-text-500" th:classappend="${tag.color}"
+                             th:each="tag : ${blog.tags}" th:text="${tag.name}">方法论</a>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="five wide column">
+                    <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                      <img src="https://unsplash.it/800/450?image=1005" th:src="@{${blog.firstPicture}}" alt=""
+                           class="ui rounded image">
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!--footer-->
+            <div class="ui bottom" th:if="${page.totalPages}>1">
+              <div class="ui middle aligned three column grid">
+                <div class="column">
+                  <a href="#" th:href="@{/search(query=${query},page=${page.number}-1)}" th:unless="${page.first}" class="ui blue inverted labeled icon button">
+                    <i class="arrow left icon"></i>上一页</a>
+                </div>
+                <div class="center aligned column">
+                  <span class="m-margin-lr-small" th:text="|${page.number+1} / ${page.totalPages}|">2 / 7</span>
+                </div>
+                <div class="right aligned column">
+                  <a href="#" th:href="@{/search(query=${query},page=${page.number}+1)}" th:unless="${page.last}" class="ui blue inverted right labeled icon button">
+                    下一页<i class="arrow right icon"></i></a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!--侧边栏-->
+          <div class="four wide column">
+            <!--个人简介-->
+            <!--/*/<th:block th:replace="_fragments :: sideIntroduction">/*/-->
+            <!--/*/</th:block>/*/-->
+
+            <!--欢迎光临-->
+            <!--/*/<th:block th:replace="_fragments :: sideWelcome">/*/-->
+            <!--/*/</th:block>/*/-->
+
+            <!--APlayer-->
+            <!--/*/<th:block th:replace="_fragments :: sideAPlayer">/*/-->
+            <!--/*/</th:block>/*/-->
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <canvas id="canvas" width="1920" height="1080"></canvas>
+
+
+  <!--底部footer-->
+  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+  </footer>
+
+  <!--/*/<th:block th:replace="_fragments :: myScript">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+  <script>
+      $('.ui.accordion').accordion();
+  </script>
+</body>
+</html>
